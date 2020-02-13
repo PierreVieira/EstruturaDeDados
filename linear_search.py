@@ -1,8 +1,3 @@
-"""
-Autor: Pierre Vieira
-"""
-
-
 def busca_linear(lista, elemento):
     """
     Complexidade -> O(n)
@@ -20,3 +15,6 @@ def busca_linear(lista, elemento):
 Essa maneira não é a mais eficiente para realizar a busca. Caso os elementos estejam ordenados, o mais aconselhável é
 utilizar o algoritmo de busca binária (complexidade O(log(n)).
 """
+if __name__ == '__main__':
+    lista = [i+1 for i in range(10)]
+    print(busca_linear(lista, 6))
