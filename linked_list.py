@@ -25,6 +25,15 @@ class LinkedList:
             self.head = no  # Primeira inserção
         self._size += 1  # O tamanho da lista aumenta após a inserção do elemento
 
+    def _getnode(self, index):
+        pointer = self.head
+        for i in range(index):
+            if pointer:
+                pointer = pointer.next
+            else:
+                raise IndexError('O índice não está disponível na lista.')
+        return pointer
+
     def __len__(self):
         """
         :return: tamanho da lista
@@ -32,6 +41,7 @@ class LinkedList:
         return self._size
 
     # Sobrecarga de operador
+
     def __getitem__(self, index):
         """
         Complexidade: O(n)
@@ -39,17 +49,13 @@ class LinkedList:
         :return: elemento que está no índice informado
         """
         # a = lista[6]
-        pointer = self.head
-        for i in range(index):
-            if pointer:  # Pointer not is none
-                pointer = pointer.next
-            else:  # Deve-se lançar um erro
-                raise IndexError("O índice não está disponível para a lista")
+        pointer = self._getnode(index)
         if pointer:
             return pointer.data
         raise IndexError("O índice não está disponível para a lista")
 
     # Sobrecarga de operador
+
     def __setitem__(self, index, value):
         """
         Complexidade: O(n)
@@ -58,12 +64,7 @@ class LinkedList:
         :return: None
         """
         # lista[5] = 9
-        pointer = self.head
-        for i in range(index):
-            if pointer:  # Pointer not is none
-                pointer = pointer.next
-            else:  # Deve-se lançar um erro
-                raise IndexError("O índice não está disponível para a lista")
+        pointer = self._getnode(index)
         if pointer:
             pointer.data = value
         else:
@@ -83,11 +84,64 @@ class LinkedList:
             i += 1
         raise ValueError(f'O elemento {element} não está na lista')
 
+    def insert(self, element, index):
+        """
+        Complexidade: O(n)
+        O método irá empurrar os elementos adjacentes ao índice escolhido
+        :param index: índice onde será inserido o elemento
+        :param element: elemento que será inserido
+        :return: None
+        """
+        node = Node(element)
+        if index == 0:  # Queremos inserir na cabeça
+            node.next, self.head = self.head, node
+        else:
+            pointer = self._getnode(index - 1)
+            node = Node(element)
+            node.next = pointer.next
+            pointer.next = node
+        self._size += 1
+
+    def remove(self, element):
+        """
+        Complexidade: O(n)
+        :param element: Elemento a ser removido da lista
+        :return: True se conseguiu remover o elemento. Caso contrário lança um ValueError
+        """
+        if self.head is None:
+            raise ValueError('{} is not in list'.format(element))
+        elif self.head.data == element:
+            self.head = self.head.next
+            self._size -= 1
+        else:
+            ancestor, pointer = self.head, self.head.next
+            while pointer:
+                if pointer.data == element:
+                    ancestor.next, pointer.next = pointer.next, None
+                    break
+                ancestor, pointer = pointer, pointer.next
+            if pointer:
+                self._size -= 1
+                return True
+            raise ValueError('{} is not in list'.format(element))
+
+    def __repr__(self):
+        r = ''
+        pointer = self.head
+        while pointer:
+            r += str(pointer.data) + '->'
+            pointer = pointer.next
+        return r
+
 
 if __name__ == '__main__':
     lista = LinkedList()
     lista.append(8)
     lista.append('pierre')
-    print(lista[1])
-    print(len(lista))
-    print(lista.index(8))
+    lista.append(12)
+    print(lista)
+    lista.insert(15, 1)
+    print(lista)
+    print('Índice do número 8: {}'.format(lista.index(8)))
+    lista.remove('pierre')
+    print(lista)
