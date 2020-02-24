@@ -1,5 +1,4 @@
 from Tree.tree import BinaryTree, TreeNode
-"""Exemplo de percurso em ordem simétrica"""
 
 #      '+'
 #    /     \
