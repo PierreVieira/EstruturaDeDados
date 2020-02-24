@@ -20,40 +20,58 @@ class BinaryTree:
             self.root = node  # Raiz da árvore
         else:
             self.root = None
+        self._prefixo = ''
+        self._infixo = ''
+        self._posfixo = ''
 
-    def simetric_traversal(self, node=None):
+    @property
+    def prefixo(self):
+        self._prefixo = ''
+        self._preorder_traversal()
+        return self._prefixo[:-1]
+
+    @property
+    def infixo(self):
+        self._infixo = ''
+        self._inorder_traversal()
+        return self._infixo[:-1]
+
+    @property
+    def posfixo(self):
+        self._posfixo = ''
+        self._postorder_traversal()
+        return self._posfixo[:-1]
+
+    def _preorder_traversal(self, node=None):
+        """Faz o percurso na árvore em pós ordem"""
+        if node is None:  # se o nó é vazio
+            node = self.root  # o nó é a raíz da arvore
+        self._prefixo += node.__str__() + ' '
+        if node.left:  # se tem filho à esquerda
+            self._preorder_traversal(node.left)
+        if node.right:  # se tem filho à direita
+            self._preorder_traversal(node.right)
+
+    def _inorder_traversal(self, node=None):
         """Percurso em ordem simétrica"""
         if node is None:  # se o nó é vazio
             node = self.root
         if node.left:
-            print('(', end='')
-            self.simetric_traversal(node.left)
-        print(node, end='')
+            self._inorder_traversal(node.left)
+        self._infixo += node.__str__() + ' '
         if node.right:
-            self.simetric_traversal(node.right)
-            print(')', end='')
+            self._inorder_traversal(node.right)
         # A subarvore da direita só será exibida quando a subarvore da esquerda for exibida
 
-    def inorder_traversal(self, node=None):
-        """Percurso em ordem simétrica"""
-        if node is None:  # se o nó é vazio
-            node = self.root
-        if node.left:
-            self.inorder_traversal(node.left)
-        print(node, end=' ')
-        if node.right:
-            self.inorder_traversal(node.right)
-        # A subarvore da direita só será exibida quando a subarvore da esquerda for exibida
-
-    def postorder_traversal(self, node=None):
+    def _postorder_traversal(self, node=None):
         """Faz o percurso na árvore em pós ordem"""
         if node is None:  # se o nó é vazio
             node = self.root  # o nó é a raíz da arvore
         if node.left:  # se tem filho à esquerda
-            self.postorder_traversal(node.left)
+            self._postorder_traversal(node.left)
         if node.right:  # se tem filho à direita
-            self.postorder_traversal(node.right)
-        print(node)
+            self._postorder_traversal(node.right)
+        self._posfixo += node.__str__() + ' '
 
     def height(self, node=None):
         """Retorna o tamanho da árvore"""
@@ -126,7 +144,7 @@ if __name__ == '__main__':
     bst = BinarySearchTree()
     for v in values:
         bst.insert(v)
-    bst.inorder_traversal()
+    print(bst.infixo)
 
     itens = (1, 3, 981, 510, 1000)
     print()
