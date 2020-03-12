@@ -13,6 +13,9 @@ class TreeNode:
 
 class BinaryTree:
     def __init__(self, data=None, node=None):
+        self._posfixo = ''
+        self._infixo = ''
+        self._prefixo = ''
         if node:
             self.root = node
         elif data:  # se o usuário especificou o nó
@@ -20,25 +23,19 @@ class BinaryTree:
             self.root = node  # Raiz da árvore
         else:
             self.root = None
-        self._prefixo = ''
-        self._infixo = ''
-        self._posfixo = ''
 
     @property
     def prefixo(self):
-        self._prefixo = ''
         self._preorder_traversal()
         return self._prefixo[:-1]
 
     @property
     def infixo(self):
-        self._infixo = ''
         self._inorder_traversal()
         return self._infixo[:-1]
 
     @property
     def posfixo(self):
-        self._posfixo = ''
         self._postorder_traversal()
         return self._posfixo[:-1]
 
